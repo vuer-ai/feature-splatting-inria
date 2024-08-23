@@ -1,0 +1,15 @@
+regex
+plyfile
+tqdm
+scipy
+einops
+pykdtree
+taichi
+open3d
+# params_proto
+ftfy
+opencv-python
+git+https://github.com/facebookresearch/segment-anything.git
+git+https://github.com/RogerQi/MobileSAMV2.git
+git+https://github.com/RogerQi/maskclip_onnx.git
+vuer
