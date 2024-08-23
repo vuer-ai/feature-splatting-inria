@@ -26,8 +26,8 @@ can not be properly set up with the default mamba solver. The following instruct
 conda create -y -n feature_splatting python=3.8 && conda activate feature_splatting
 pip install torch==2.1.2+cu118 torchvision==0.16.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
 conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
-git clone --recursive https://github.com/RogerQi/gaussian_feature
-cd gaussian_feature
+git clone --recursive https://github.com/vuer-ai/feature-splatting-inria
+cd feature-splatting-inria
 cd submodules/diff-gaussian-rasterization
 pip install .
 cd ../..

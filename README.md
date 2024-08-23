@@ -15,7 +15,7 @@ Clone the codebase.
 
 ```bash
 cd ~
-git clone --recursive https://github.com/RogerQi/gaussian_feature
+git clone --recursive https://github.com/vuer-ai/feature-splatting-inria
 ```
 
 Follow [INSTALL.md](./docs/INSTALL.md) to install required dependencies.
@@ -31,9 +31,9 @@ For testing the codebase, we recommend donwloading sample datasets ([kitchen bul
 [garden vase](https://ucsdcloud-my.sharepoint.com/:u:/g/personal/riqiu_ucsd_edu/EZGSO896TDNEq5vzyntvp-EB7xxQx-3K2R3uxpF1DIHIlA?e=Be6HcV)) and following the instructions below.
 
 ```bash
-# Assume that garden_table_colmap.zip was downloaded to ~/Downloads and gaussian_feature is under home directory
+# Assume that garden_table_colmap.zip was downloaded to ~/Downloads and feature-splatting-inria is under home directory
 cd ~
-cd gaussian_feature
+cd feature-splatting-inria
 mkdir feat_data && cd feat_data
 mv ~/Downloads/garden_table_colmap.zip ./
 unzip garden_table_colmap.zip
@@ -128,6 +128,7 @@ The output is also located at `output/garden_table/interpolating_camera/ours_100
 
 ## TODOs
 
+- [ ] Add instructions for serializing synthetic assets from objaverse
 - [ ] Support more interactive GS selection process with Vuer / supersplat canvas
 - [ ] Experiment with projection-based method that would remove need for post-processing
 - [ ] Organize code for rotation estimation
