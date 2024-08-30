@@ -1,10 +1,25 @@
+from typing import Union, List
 import time
 import numpy as np
 import torch
-
 from einops import rearrange, einsum
-from submodules.patched_clip.patched_clip.patched_clip import CLIP_args, load_clip
-from submodules.patched_clip.patched_clip import modified_clip
+import maskclip_onnx
+
+class clip_text_encoder:
+    def __init__(self, clip_model_name: str, device: Union[str, torch.device]):
+        self.clip_model_name = clip_model_name
+        self.device = device
+        self.clip, _ = maskclip_onnx.clip.load(self.clip_model_name, device=self.device)
+        self.clip.eval()
+
+    @torch.no_grad()
+    def get_text_token(self, text_list: List[str]):
+        """Compute CLIP embeddings based on queries and update state"""
+        tokens = maskclip_onnx.clip.tokenize(text_list).to(self.device)
+        embed = self.clip.encode_text(tokens).float()
+        embed /= embed.norm(dim=-1, keepdim=True)
+        return embed 
+
 
 class clip_segmenter:
     def __init__(self, gaussians, conv_feat_decoder,
@@ -12,11 +27,9 @@ class clip_segmenter:
                  clip_device='cpu') -> None:
         self.gaussians = gaussians
         self.feat_decoder = conv_feat_decoder
+        self.device = clip_device
 
-        CLIP_args.device = clip_device
-        self.device = CLIP_args.device
-
-        self.clip_model, _ = load_clip()
+        self.clip_text_encoder = clip_text_encoder("ViT-L/14@336px", self.device)
 
         self.canonical_words = canonical_words
 
@@ -51,20 +64,12 @@ class clip_segmenter:
         else:
             self.part_level_available = False
     
+    @torch.no_grad()
     def get_text_embeddings(self, texts):
         """
         Get CLIP embeddings for a list of texts.
         """
-        with torch.no_grad():
-            device = CLIP_args.device
-            # text
-            text_inputs = torch.cat([modified_clip.tokenize(f"{c}") for c in texts]).to(device)
-
-            with torch.no_grad():
-                text_features = self.clip_model.encode_text(text_inputs)
-                text_features /= text_features.norm(dim=1, keepdim=True)
-
-            return text_features
+        return self.clip_text_encoder.get_text_token(texts)
     
     def decoder_infer(self, x, level="object"):
         assert level in ["object", "part"]
