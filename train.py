@@ -48,10 +48,12 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
     ema_loss_for_log = 0.0
     progress_bar = tqdm(range(first_iter, opt.iterations), desc="Training progress")
     first_iter += 1
-    
-    FAULTY_CARD_FLAG = False  # my old 3090 crashes when utilization is too high...
 
-    my_feat_decoder = skip_feat_decoder(dataset.distill_feature_dim, part_level=False).cuda()
+    part_level_flag = (dataset.feature_type == "clip_part")
+    
+    FAULTY_CARD_FLAG = True  # my old 3090 crashes when utilization is too high...
+
+    my_feat_decoder = skip_feat_decoder(dataset.distill_feature_dim, part_level=part_level_flag).cuda()
     decoder_optimizer = torch.optim.Adam(my_feat_decoder.parameters(), lr=0.001)
 
     for iteration in range(first_iter, opt.iterations + 1):
@@ -119,19 +121,35 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
             loss = loss + depth_loss
 
         if iteration < opt.update_features_until_iter:
-            gt_clip_feat = viewpoint_cam.feat_chw.cuda()
-            gt_dino_feat = viewpoint_cam.dino_feat_chw.cuda()
-            rendered_feat_bhwc = F.interpolate(rendered_feat.unsqueeze(0), size=gt_clip_feat.shape[1:], mode="bilinear", align_corners=False)
-            dino_feat, clip_feat = my_feat_decoder(rendered_feat_bhwc)
-            dino_feat = F.interpolate(dino_feat, size=gt_dino_feat.shape[1:], mode="bilinear", align_corners=False)
-            dino_feat = dino_feat.squeeze(0)
-            clip_feat = clip_feat.squeeze(0)
+            if part_level_flag:
+                gt_clip_feat = viewpoint_cam.feat_chw.cuda()
+                gt_part_feat = viewpoint_cam.part_feat_chw.cuda()
+                assert gt_clip_feat.shape[1:] == gt_part_feat.shape[1:]
+                rendered_feat_bhwc = F.interpolate(rendered_feat.unsqueeze(0), size=gt_clip_feat.shape[1:], mode="bilinear", align_corners=False)
+                # Decode low dim feature to clip and dino features
+                dino_feat, clip_feat, part_feat = my_feat_decoder(rendered_feat_bhwc)
+                clip_feat = clip_feat.squeeze(0)
+                part_feat = part_feat.squeeze(0)
 
-            ignore_feat_mask = (torch.sum(gt_clip_feat == 0, dim=0) == gt_clip_feat.shape[0])
-            gt_clip_feat[:, ignore_feat_mask] = clip_feat[:, ignore_feat_mask]
-            clip_loss = cosine_loss(clip_feat, gt_clip_feat)
-            dino_loss = cosine_loss(dino_feat, gt_dino_feat)
-            feat_loss = clip_loss + 0.1 * dino_loss
+                valid_feat_mask = (torch.sum(gt_clip_feat == 0, dim=0) != gt_clip_feat.shape[0])
+                clip_loss = cosine_loss(clip_feat, gt_clip_feat, mask=valid_feat_mask)
+                valid_part_feat_mask = (torch.sum(gt_part_feat == 0, dim=0) != gt_part_feat.shape[0])
+                part_loss = cosine_loss(part_feat, gt_part_feat, mask=valid_part_feat_mask)
+                feat_loss = clip_loss + 0.5 * part_loss
+            else:
+                gt_clip_feat = viewpoint_cam.feat_chw.cuda()
+                gt_dino_feat = viewpoint_cam.dino_feat_chw.cuda()
+                rendered_feat_bhwc = F.interpolate(rendered_feat.unsqueeze(0), size=gt_clip_feat.shape[1:], mode="bilinear", align_corners=False)
+                dino_feat, clip_feat = my_feat_decoder(rendered_feat_bhwc)
+                dino_feat = F.interpolate(dino_feat, size=gt_dino_feat.shape[1:], mode="bilinear", align_corners=False)
+                dino_feat = dino_feat.squeeze(0)
+                clip_feat = clip_feat.squeeze(0)
+
+                ignore_feat_mask = (torch.sum(gt_clip_feat == 0, dim=0) == gt_clip_feat.shape[0])
+                gt_clip_feat[:, ignore_feat_mask] = clip_feat[:, ignore_feat_mask]
+                clip_loss = cosine_loss(clip_feat, gt_clip_feat)
+                dino_loss = cosine_loss(dino_feat, gt_dino_feat)
+                feat_loss = clip_loss + 0.1 * dino_loss
 
             loss = loss + 0.1 * feat_loss
 
