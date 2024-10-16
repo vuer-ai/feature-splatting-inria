@@ -1,6 +1,6 @@
 # Feature Splatting
 
-<a href="assets/method_overview.png"><img height="300" src="aassets/method_overview.png"> </a>
+<a href="assets/method_overview.png"><img height="300" src="assets/method_overview.png"> </a>
 
 This repo implements feature splattiing, which combines gaussian splatting with feature distillation. Compared to simple
 extension to the original gaussian splatting, our implementation is much faster and more memory-efficient.
