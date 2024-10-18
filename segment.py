@@ -84,7 +84,8 @@ def select_gs_for_phys(dataset : ModelParams,
                                     "point_cloud",
                                     "iteration_" + str(scene.loaded_iter))
 
-    my_feat_decoder = skip_feat_decoder(dataset.distill_feature_dim).cuda()
+    part_level_flag = (dataset.feature_type == "clip_part")
+    my_feat_decoder = skip_feat_decoder(dataset.distill_feature_dim, part_level=part_level_flag).cuda()
     decoder_weight_path = os.path.join(dataset.model_path, "feat_decoder.pth")
     assert os.path.exists(decoder_weight_path)
     decoder_weight_dict = torch.load(decoder_weight_path)
