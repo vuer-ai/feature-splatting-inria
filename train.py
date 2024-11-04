@@ -51,7 +51,7 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
 
     part_level_flag = (dataset.feature_type == "clip_part")
     
-    FAULTY_CARD_FLAG = True  # my old 3090 crashes when utilization is too high...
+    FAULTY_CARD_FLAG = False  # my old 3090 crashes when utilization is too high...
 
     my_feat_decoder = skip_feat_decoder(dataset.distill_feature_dim, part_level=part_level_flag).cuda()
     decoder_optimizer = torch.optim.Adam(my_feat_decoder.parameters(), lr=0.001)
