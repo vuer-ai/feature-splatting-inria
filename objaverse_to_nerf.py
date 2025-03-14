@@ -117,6 +117,6 @@ def main(uid_list, target_data_dir):
             convert_to_nerfstudio_format(tmpdir, data_dir)
 
 if __name__ == '__main__':
-    uid_list = ['570b82c4391c49ddb1e471e6e55de9f4', 'fbd7fa6a858a4e62a69885e6c3d4a43a']
+    uid_list = ['570b82c4391c49ddb1e471e6e55de9f4', 'fbd7fa6a858a4e62a69885e6c3d4a43a', 'ecb91f433f144a7798724890f0528b23']
     target_data_dir = 'feat_data/objaverse'
     main(uid_list, target_data_dir)
