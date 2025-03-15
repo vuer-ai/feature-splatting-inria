@@ -130,7 +130,7 @@ The output is also located at `output/garden_table/interpolating_camera/ours_100
 
 ## TODOs
 
-- [ ] Add instructions for serializing synthetic assets from objaverse
+- [x] Add instructions for serializing synthetic assets from objaverse
 - [ ] Support more interactive GS selection process with Vuer / supersplat canvas
 - [ ] Experiment with projection-based method that would remove need for post-processing
 - [ ] Organize code for rotation estimation
