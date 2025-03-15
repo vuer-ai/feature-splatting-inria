@@ -24,8 +24,11 @@ Follow [INSTALL.md](./docs/INSTALL.md) to install required dependencies.
 
 Currently, the repo supports training from the following data formats
 
+- Synthetic data (defined by a transforms.json and images) - [generate synthetic datasets from objaverse](./docs/synthetic_data_generation.md)
+
+<a href="assets/objaverse_ficus.gif"><img height="300" src="assets/objaverse_ficus.gif"> </a>
+
 - Colmap-processed RGB images (defined by a colmap database and a folder of images)
-- Synthetic data (defined by a transforms.json and images)
 
 For testing the codebase, we recommend donwloading sample datasets ([kitchen bulldozer](https://ucsdcloud-my.sharepoint.com/:u:/g/personal/riqiu_ucsd_edu/EUe9hgsPtldItgd7T1qBvxIBI9TVOzmOUfacfRDuKJ__jw?e=25kBdG),
 [garden vase](https://ucsdcloud-my.sharepoint.com/:u:/g/personal/riqiu_ucsd_edu/EZGSO896TDNEq5vzyntvp-EB7xxQx-3K2R3uxpF1DIHIlA?e=Be6HcV)) and following the instructions below.
@@ -40,8 +43,7 @@ unzip garden_table_colmap.zip
 cd ..
 ```
 
-Alternatively, you can follow the instructions here to [use colmap to process your own data](./docs/custom_data_processing.md)
-or [generate synthetic datasets from objaverse](./docs/synthetic_data_generation.md).
+Alternatively, you can follow the instructions here to [use colmap to process your own data](./docs/custom_data_processing.md).
 
 ## Computing features
 

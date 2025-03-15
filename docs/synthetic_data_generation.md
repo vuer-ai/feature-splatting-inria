@@ -20,3 +20,5 @@ python objaverse_to_nerf.py --uids ecb91f433f144a7798724890f0528b23 570b82c4391c
 ```
 
 Subsequent steps (feature generation, training, etc.) are the same as the [README](../README.md).
+
+<a href="assets/objaverse_ficus.gif"><img height="300" src="assets/objaverse_ficus.gif"> </a>
