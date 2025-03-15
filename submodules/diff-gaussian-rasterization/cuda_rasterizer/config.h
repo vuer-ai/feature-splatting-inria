@@ -13,7 +13,7 @@
 #define CUDA_RASTERIZER_CONFIG_H_INCLUDED
 
 #define NUM_COLOR_CHANNELS 3    // Default 3, RGB
-#define NUM_FEAT_CHANNELS  16   // Default 768, CLIP ViT; has to be divisible by 2
+#define NUM_FEAT_CHANNELS  32   // Default 768, CLIP ViT; has to be divisible by 2
 #define BLOCK_X 16
 #define BLOCK_Y 16
 

@@ -47,7 +47,8 @@ class ParamGroup:
 class ModelParams(ParamGroup): 
     def __init__(self, parser, sentinel=False):
         self.sh_degree = 3
-        self.distill_feature_dim = 16
+        self.distill_feature_dim = 32
+        self.feature_type = "clip_dino"  # clip_dino, clip_part
         self._source_path = ""
         self._model_path = ""
         self._images = "images"
