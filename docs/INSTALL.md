@@ -23,17 +23,13 @@ can not be properly set up with the default mamba solver. The following instruct
 ### Install Gaussian-related packages
 
 ```
-conda create -y -n feature_splatting python=3.8 && conda activate feature_splatting
-pip install torch==2.1.2+cu118 torchvision==0.16.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
-conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
+conda create -y -n feature_splatting python=3.11 && conda activate feature_splatting
+pip install torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1 --index-url https://download.pytorch.org/whl/cu128
+conda install -c "nvidia/label/cuda-12.8.0" cuda-toolkit
 git clone --recursive https://github.com/vuer-ai/feature-splatting-inria
 cd feature-splatting-inria
-cd submodules/diff-gaussian-rasterization
-pip install .
-cd ../..
-cd submodules/simple-knn
-pip install .
-cd ../..
+pip install submodules/diff-gaussian-rasterization
+pip install submodules/simple-knn
 pip install -r requirements.txt
 ```
 
