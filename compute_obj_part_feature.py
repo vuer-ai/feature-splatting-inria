@@ -16,6 +16,9 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 import maskclip_onnx
 
+# Rate limit workaround (https://github.com/pytorch/pytorch/issues/61755#issuecomment-885801511)
+torch.hub._validate_not_a_forked_repo=lambda a,b,c: True
+
 def resize_image(img, longest_edge):
     # resize to have the longest edge equal to longest_edge
     width, height = img.size
