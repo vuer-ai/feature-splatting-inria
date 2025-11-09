@@ -44,3 +44,8 @@ It may be due to the version of setuptools. You can downgrade the version of set
 ```
 pip install setuptools==69.5.1
 ```
+
+2. Weird error such as `torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 263168.04 GiB.`
+
+This has something to do with the compute capability specified in [rasterizer setup config](../submodules/diff-gaussian-rasterization/setup.py).
+You may need to set compute capability for your GPU, especially if it is a newer release.

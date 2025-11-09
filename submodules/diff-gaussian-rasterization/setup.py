@@ -15,7 +15,7 @@ import os
 os.path.dirname(os.path.abspath(__file__))
 
 # Set environment variable for CUDA compute capability
-os.environ["TORCH_CUDA_ARCH_LIST"] = "8.6 8.0 7.0"
+# os.environ["TORCH_CUDA_ARCH_LIST"] = "12.0 8.6 8.0 7.0"
 
 setup(
     name="diff_gaussian_rasterization",
